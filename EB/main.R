@@ -28,16 +28,18 @@ source('get_answers.R')
 exec_dir <- dirname(rstudioapi::getSourceEditorContext()$path) #the dir this script is in
 setwd(exec_dir)
 
+token <- "?token=UGIY3QNEFWC2WANDRCOL"
+
 institutes <- read_delim(paste0(dirname(exec_dir),'data/unique_aff.csv'), ";") # manually updated list of affiliations
 pats       <- c("gmail|hotmail|yahoo|msn|icloud|live|outlook") # most common non-affiliation email addresses
 req_names  <- c("id","affiliation","eSc_collab","dis1","dis2","dis3","dis4","dis5","career_stage",
                "git_quiz","order_id","ticket_type","created","name", "email")      
 
-evURL <- "https://www.eventbriteapi.com/v3/organizations/91980504819/events/?token=UGIY3QNEFWC2WANDRCOL" #figure out events we have
+evURL <- paste0("https://www.eventbriteapi.com/v3/organizations/91980504819/events/", token) #figure out events we have
 
 event_info <- event_info(evURL)
 
-try_all <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) eSc_ppts_EB(el, req_names)) # eSc_ppts_EB extracts info 
+try_all <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) eSc_ppts_EB(el, req_names, token)) # eSc_ppts_EB extracts info 
                                                                                              # from each events' page
 # numbers in between throw an error I haven't had time to check yet (2,11,18,19,23,24)
 
