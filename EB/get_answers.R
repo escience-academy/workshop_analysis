@@ -12,7 +12,7 @@ get_answers <- function(ppt_all, ppt_info) {
   cols            <- c(ppt_info$id[ans_idx])
   answers_raw     <- data.frame(ppt_all$answers)
   
-  if (is_empty(answers)) {
+  if (is_empty(answers_raw)) {
     
     answers <- ppt_info
     

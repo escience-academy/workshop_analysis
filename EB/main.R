@@ -28,7 +28,7 @@ source('get_answers.R')
 exec_dir <- dirname(rstudioapi::getSourceEditorContext()$path) #the dir this script is in
 setwd(exec_dir)
 
-token <- "?token=UGIY3QNEFWC2WANDRCOL"
+tokens <- read.delim("tokens.txt", header=F)
 
 institutes <- read_delim(paste0(dirname(exec_dir),'data/unique_aff.csv'), ";") # manually updated list of affiliations
 pats       <- c("gmail|hotmail|yahoo|msn|icloud|live|outlook") # most common non-affiliation email addresses

@@ -9,7 +9,7 @@ eSc_ppts_EB <- function(EBurl, req_names, token) {
   #' Ouput:
   #'         A dataframe with the column names in req_names that corresponds to the information in the url provided
 
-  Q_A         <- GET(paste0(EBurl, 'attendees/' token))
+  Q_A         <- GET(paste0(EBurl, 'attendees/', token))
   ppt_all     <- fromJSON(rawToChar(Q_A$content))$attendees 
   
   ppt_pers    <- ppt_all$profile %>% 
