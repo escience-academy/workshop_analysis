@@ -1,0 +1,66 @@
+#-------------------------------------------
+#Script by Lieke de Boer, March 2021
+#Calls eSc_ppts which scrapes participant information off of Eventbrite (EB), returns a dataframe with participant information (if available):
+# event name
+# event date
+# organiser name (NLeSc, NL-RSE or other)
+# event ppt name
+# event ppt email address
+# event ppt affiliation
+# event ppt career stage
+# event ppt collaborator with NLeSc?
+# up to 5 disciplines (dis1-dis5)
+# did ppt fill out git quiz?
+# some EB inforamtion about ticket
+#-------------------------------------------
+# To Do:
+# - check error in lapply
+# - clean up affiliations
+#-------------------------------------------
+# searches eventbrite for my event IDs and returns data about workshops participants
+library(jsonlite)
+library(httr)
+library(tidyverse)
+source('get_ppt_info.R')
+source('event_info.R')
+source('get_answers.R')
+
+exec_dir <- dirname(rstudioapi::getSourceEditorContext()$path) #the dir this script is in
+setwd(exec_dir)
+
+tokens <- read.delim("tokens.txt", header=F)
+token <- str_split(tokens$V1, pattern=" ")[[1]][2]
+
+institutes <- read_delim(paste0(dirname(exec_dir),'/data/unique_aff.csv'), ";") # manually updated list of affiliations
+pats       <- c("gmail|hotmail|yahoo|msn|icloud|live|outlook") # most common non-affiliation email addresses
+req_names  <- c("id","affiliation","eSc_collab","dis1","dis2","dis3","dis4","dis5","career_stage",
+                "git_quiz","order_id","ticket_type","created","name", "email")      
+
+evURL <- paste0("https://www.eventbriteapi.com/v3/organizations/91980504819/events/", token) #figure out events we have
+
+event_info <- event_info(evURL)
+
+try_all <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
+# from each events' page
+# numbers in between throw an error I haven't had time to check yet (2,11,18,19,23,24)
+
+
+all_together <- do.call("bind_rows", try_all) %>% 
+  mutate(affiliation=toupper(affiliation))
+all_together$email_aff<-sapply(strsplit(all_together$email, "@"), "[[", 2)
+all_together$email_aff<-str_replace_all(all_together$email_aff, pats, NA_character_)
+all_together <- left_join(all_together, unique(institutes)) %>% 
+  mutate(affiliation=aff_corrected) %>% 
+  select(-aff_corrected)
+# all_together <- left_join(all_together, unique(institutes)) #manually adapted affiliations
+
+event_data <- merge(all_together, event_info, by="event_id") %>% 
+  mutate(affiliation = coalesce(affiliation,email_aff)) %>% 
+  mutate(affiliation=toupper(affiliation)) 
+
+event_data <- left_join(event_data, unique(institutes)) %>% # do this again so the ones who filled out something like "PhD student" 
+  #in the affiliation field, get the affiliation from their email address
+  select(event, event_date, org_id,name,email,aff_corrected,career_stage,eSc_collab,dis1,dis2,dis3,dis4,dis5,
+         aff_country, RI_type,created,ticket_type,order_id,id,event_id,venue_id,uri,affiliation)
+
+write_csv(event_data,'eventbrite.csv')
