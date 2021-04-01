@@ -40,11 +40,9 @@ get_answers <- function(ppt_all, ppt_info) {
       mutate(id=cols) %>% 
       left_join(ppt_info, by="id")
     
-    if (is.element("disciplines", names(answers))) {
-      answers <- answers %>% 
-        separate(disciplines,sep=" [|] ",c("dis1", "dis2", "dis3", "dis4", "dis5"), 
-                 extra="drop", fill="right")
-    }
+    answers<-cut_disciplines(answers)
+    answers<-cut_career_stage(answers)
+    
   }
   return(answers)
 }
