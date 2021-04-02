@@ -66,4 +66,6 @@ event_data <- left_join(event_data, unique(institutes)) %>% # do this again so t
   select(event, event_date, year, org_id,name,email,aff_corrected,car1,car2,eSc_collab,dis1,dis2,dis3,dis4,dis5,
          aff_country, RI_type,created,ticket_type,order_id,id,event_id,venue_id,uri,affiliation)
 
+get_unique_ev(event_data$event)
+
 write_csv(event_data, paste0(dirname(exec_dir),'/data/eventbrite.csv'))
