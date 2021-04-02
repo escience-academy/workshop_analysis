@@ -21,16 +21,14 @@
 library(jsonlite)
 library(httr)
 library(tidyverse)
-source('get_ppt_info.R')
-source('event_info.R')
-source('get_answers.R')
-source('cut_disciplines.R')
-source('cut_career_stage.R')
 
 exec_dir <- dirname(rstudioapi::getSourceEditorContext()$path) #the dir this script is in
 setwd(exec_dir)
 
-tokens <- read.delim("tokens.txt", header=F)
+source("get_EB_functions.R")
+get_EB_functions()
+
+gtokens <- read.delim("tokens.txt", header=F)
 token <- str_split(tokens$V1, pattern=" ")[[1]][2]
 
 institutes <- read_delim(paste0(dirname(exec_dir),'/data/unique_aff.csv'), ";") # manually updated list of affiliations
