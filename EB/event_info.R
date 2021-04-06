@@ -12,7 +12,11 @@ event_info <- function(evURL) {
                              organizer_id == "8536296706" ~ "NLeSc",
                              organizer_id == "11806205959" ~ "NLeSc+LeidenHistoryInst",
                              organizer_id == "29275724533" ~ "NL-RSE")) %>%  #make sure IDs make sense to us (had to convert manually from EB)
-    select(event_id, uri, org_id, venue_id, event, event_date)
+    select(event_id, uri, org_id, venue_id, event, event_date) %>% 
+    mutate(event_type = get_unique_events(event)) %>% 
+    mutate(event_level = get_event_level(event_type))
+    
+ # event_info$event_level <- get_event_level(event_info)
   
   return(event_info)
   
