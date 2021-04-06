@@ -63,7 +63,6 @@ event_data <- merge(all_together, event_info, by="event_id") %>%
 event_data <- left_join(event_data, unique(institutes)) %>% # do this again so the ones who filled out something like "PhD student" 
   #in the affiliation field, get the affiliation from their email address
   select(event, event_date, year, org_id,name,email,aff_corrected, Affiliation_type, car1,car2,eSc_collab,dis1,dis2,dis3,dis4,dis5,
-         aff_country, RI_type,created,event_type,event_level,ticket_type,order_id,id,event_id,venue_id,uri,affiliation)
-
+         aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri,affiliation)
 
 write_csv(event_data, paste0(dirname(exec_dir),'/data/eventbrite.csv'))
