@@ -26,7 +26,7 @@ get_ppt_info <- function(EBurl, req_names, token) {
   add_after <- req_names[!is.element(req_names,names(answers))]
   answers[,add_after]=NA
   
-  return(answers)
+  return(answers) #change back to return(answers)
 }
 
 #for (ev in 39:39){#length(event_info$uri)) {

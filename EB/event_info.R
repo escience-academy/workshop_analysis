@@ -16,9 +16,6 @@ event_info <- function(evURL) {
     mutate(event_type = get_unique_events(event)) %>% 
     mutate(event_level = get_event_level(event_type)) %>% 
     mutate(event_focus = get_event_focus(event_type))
-    
- # event_info$event_level <- get_event_level(event_info)
-  
+
   return(event_info)
-  
 }
