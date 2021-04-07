@@ -33,14 +33,16 @@ token <- str_split(tokens$V1, pattern=" ")[[1]][2]
 
 institutes <- read_delim(paste0(dirname(exec_dir),'/data/unique_aff.csv'), ";") # manually updated list of affiliations
 pats       <- c("gmail|hotmail|yahoo|msn|icloud|live|outlook") # most common non-affiliation email addresses
-req_names  <- c("id","affiliation","eSc_collab","dis1","dis2","dis3","dis4","dis5","car1", "car2",
+req_names  <- c("id","affiliation","eSc_collab","ERCdis","NLeScdis", "dis1","dis2","dis3","dis4","dis5","car1", "car2",
                 "git_quiz","order_id","ticket_type","created","name", "email")      
 
 evURL <- paste0("https://www.eventbriteapi.com/v3/organizations/91980504819/events/", token) #figure out events we have
 
 event_info <- event_info(evURL)
 
+#all_events <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
 all_events <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
+
 # from each events' page
 # numbers in between throw an error I haven't had time to check yet (2,11,18,19,23,24)
 
@@ -62,7 +64,8 @@ event_data <- merge(all_together, event_info, by="event_id") %>%
 
 event_data <- left_join(event_data, unique(institutes)) %>% # do this again so the ones who filled out something like "PhD student" 
   #in the affiliation field, get the affiliation from their email address
-  select(event, event_date, year, org_id,name,email,aff_corrected, Affiliation_type, car1,car2,eSc_collab,dis1,dis2,dis3,dis4,dis5,
+  select(event, event_date, year, org_id,name,email,aff_corrected, Affiliation_type, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
          aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri,affiliation)
 
 write_csv(event_data, paste0(dirname(exec_dir),'/data/eventbrite.csv'))
+

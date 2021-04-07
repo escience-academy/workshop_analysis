@@ -41,6 +41,7 @@ get_answers <- function(ppt_all, ppt_info) {
       left_join(ppt_info, by="id")
     
     answers<-cut_disciplines(answers)
+    answers<-detect_discipline(answers)
     answers<-cut_career_stage(answers)
     
   }

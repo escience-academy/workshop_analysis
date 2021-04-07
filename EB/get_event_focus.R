@@ -9,11 +9,16 @@ get_event_focus <- function(event_data) {
     mutate_if(grepl('Containers',., ignore.case=T), ~replace(., grepl('Containers.*', ., ignore.case=T), "Open & Reproducible Research Software")) %>% 
     mutate_if(grepl('eScience Symposium',., ignore.case=T), ~replace(., grepl('eScience Symposium.*', ., ignore.case=T), "Other")) %>% 
     mutate_if(grepl('Unix',., ignore.case=T), ~replace(., grepl('Unix.*', ., ignore.case=T), "Open & Reproducible Research Software")) %>% 
-    mutate_if(grepl('GitHub',., ignore.case=T), ~replace(., grepl('GitHub.*', ., ignore.case=T), "Open & Reproducible Research Software")) 
+    mutate_if(grepl('GitHub',., ignore.case=T), ~replace(., grepl('GitHub.*', ., ignore.case=T), "Open & Reproducible Research Software")) %>%  
+    mutate_if(grepl('Introduction to scientific data analysis',., ignore.case=T), ~replace(., grepl('Introduction to scientific data analysis.*', ., ignore.case=T), "Open & Reproducible Research Software")) %>%   
+    mutate_if(grepl('humanities',., ignore.case=T), ~replace(., grepl('humanities.*', ., ignore.case=T), "Domain Specific"))  %>% 
+    mutate_if(grepl('Visualization',., ignore.case=T), ~replace(., grepl('visualization.*', ., ignore.case=T), "Open & Reproducible Research Software"))  
+  
+  
     # mutate_if(grepl('Introduction',., ignore.case=T), ~replace(., grepl('Introduction.*', ., ignore.case=T), "Essential")) 
     
   un_events$event_focus <- if_else((un_events$event_focus != "Open & Reproducible Research Software") & (un_events$event_focus != "Domain Specific") & (un_events$event_focus != "Technology Specific") &
-                                   (un_events$event_focus != "Other"), "Other" , un_events$event_focus)  
+                                   (un_events$event_focus != "Other"), "Other" , un_events$event_focus) 
   # mutate(level = mutate_if(grepl()))
   
   return(un_events$event_focus)

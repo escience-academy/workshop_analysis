@@ -7,6 +7,7 @@ get_EB_functions <- function() {
   source('cut_career_stage.R')
   source('get_unique_events.R')
   source('get_event_level.R')
-  source('get_event_spec.R')
+  source('get_event_focus.R')
+  source('detect_discipline.R')
   
 }
