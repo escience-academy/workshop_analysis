@@ -1,0 +1,25 @@
+﻿dis;ERC;NLeSc
+Civil, Mechanical, Chemical, or Nuclear Engineering;PE | PE;Ph&B | Ph&B
+Computer Science or Electrical Engineering;PE | PE;Ph&B | Ph&B
+High Performance Computing;PE | PE;Ph&B | Ph&B
+Mathematics or Statistics;PE | PE;Ph&B | Ph&B
+Physical Sciences;PE | PE;Ph&B | Ph&B
+Space Sciences;PE | PE;Ph&B | Ph&B
+Earth Sciences;PE | LS;SE | Ph&B
+Planetary Sciences (Geology, Climatology, Oceanography, etc.);PE | LS;SE | Ph&B
+Biomedical or Health Sciences;LS | LS;LS | LS
+Chemistry;LS | PE;LS | Ph&B
+Genetics, Genomics or Bioinformatics;LS | PE;LS | Ph&B
+Life Sciences;LS | LS;LS | LS
+Medicine;LS | LS;LS | LS
+Agricultural or Environmental Sciences;LS | PE;SE | SE
+Organismal biology;LS | LS;LS | LS
+Economics or Business;SH | SH;SSH | SSH
+Education;SH | SH;SSH | SSH
+Humanities;SH | SH;SSH | SSH
+Library and Information Science;SH | SH;SSH | SSH
+Psychology or Neuroscience;SH | LS;SSH | LS
+Social Sciences;SH | SH;SSH | SSH
+Life and Health Sciences;LS | LS;LS | LS
+Natural and Environmental Sciences;LS | PE;SE | SE
+Exact Sciences and Engineering;PE | PE;Ph&B | Ph&B
