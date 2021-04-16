@@ -54,12 +54,15 @@ all_together <- do.call("bind_rows", all_events) %>%
 all_together$email_aff<-sapply(strsplit(all_together$email, "@"), "[[", 2)
 all_together$email_aff<-str_replace_all(all_together$email_aff, pats, NA_character_)
 
-event_data <- merge(all_together, event_info, by="event_id") %>% 
-  mutate(affiliation = coalesce(affiliation,email_aff)) %>% 
-  mutate(affiliation=toupper(affiliation)) %>% 
-  mutate(year = format(as.Date(event_date, format="%Y-%m-%d"), "%Y"))
+event_data <- merge(all_together, event_info, by="event_id")
+event_data <- merge(event_data, unique(institutes), all.x = T) %>% 
+  mutate(affiliation = aff_corrected) %>% 
+  mutate(affiliation = coalesce(affiliation, email_aff)) %>% 
+  mutate(affiliation = toupper(affiliation)) %>% 
+  mutate(year = format(as.Date(event_date, format="%Y-%m-%d"), "%Y")) %>% 
+  select(-aff_corrected)
 
-event_data <- left_join(event_data, unique(institutes)) %>% 
+event_data <- merge(event_data, unique(institutes), by="affiliation", all.x=T) %>% 
   mutate(affiliation=aff_corrected) %>% 
   select(-aff_corrected)
 
