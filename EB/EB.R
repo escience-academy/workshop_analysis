@@ -22,11 +22,11 @@ library(jsonlite)
 library(httr)
 library(tidyverse)
 
-source("get_EB_functions.R")
-get_EB_functions()
-
 exec_dir <- dirname(rstudioapi::getSourceEditorContext()$path) #the dir this script is in
 setwd(exec_dir)
+
+source("get_EB_functions.R")
+get_EB_functions()
 
 tokens <- read.delim("tokens.txt", header=F)
 token <- str_split(tokens$V1, pattern=" ")[[1]][2]
@@ -50,22 +50,24 @@ all_events <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) g
 all_together <- do.call("bind_rows", all_events) %>% 
   mutate(affiliation=toupper(affiliation))
 
+# all_together <- left_join(all_together, unique(institutes)) #manually adapted affiliations
+
 all_together$email_aff<-sapply(strsplit(all_together$email, "@"), "[[", 2)
 all_together$email_aff<-str_replace_all(all_together$email_aff, pats, NA_character_)
-all_together <- left_join(all_together, unique(institutes)) %>% 
-  mutate(affiliation=aff_corrected) %>% 
-  select(-aff_corrected)
-# all_together <- left_join(all_together, unique(institutes)) #manually adapted affiliations
 
 event_data <- merge(all_together, event_info, by="event_id") %>% 
   mutate(affiliation = coalesce(affiliation,email_aff)) %>% 
   mutate(affiliation=toupper(affiliation)) %>% 
   mutate(year = format(as.Date(event_date, format="%Y-%m-%d"), "%Y"))
 
+event_data <- left_join(event_data, unique(institutes)) %>% 
+  mutate(affiliation=aff_corrected) %>% 
+  select(-aff_corrected)
+
 event_data <- left_join(event_data, unique(institutes)) %>% # do this again so the ones who filled out something like "PhD student" 
   #in the affiliation field, get the affiliation from their email address
-  select(event, event_date, year, org_id,name,email,aff_corrected, Affiliation_type, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
-         aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri,affiliation)
+  select(event, event_date, year, org_id,name,email,affiliation, Affiliation_type, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
+         aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri)
 
 write_csv(event_data, paste0(dirname(exec_dir),'/data/eventbrite.csv'))
 
