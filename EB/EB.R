@@ -46,7 +46,6 @@ all_events <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) g
 # from each events' page
 # numbers in between throw an error I haven't had time to check yet (2,11,18,19,23,24)
 
-
 all_together <- do.call("bind_rows", all_events) %>% 
   mutate(affiliation=toupper(affiliation))
 
