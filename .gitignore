@@ -72,8 +72,14 @@ ehthumbs.db
 
 Thumbs.db
 
+.Rhistory
+
+#Private files#
+
+#####################
+
 tokens.txt
 
 eventbrite.csv
 
-.Rhistory
+*attendance.xlsx
