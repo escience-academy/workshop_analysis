@@ -32,9 +32,9 @@ get_answers <- function(ppt_all, ppt_info) {
       mutate_if(grepl('Discipline',.), ~replace(., grepl('Discipline.*', .), "disciplines")) %>% 
       mutate_if(grepl('career stage',.), ~replace(., grepl('career stage.*', .), "career_stage")) %>% 
       mutate_if(grepl('Git Quiz',.), ~replace(., grepl('Git Quiz.*', .), "git_quiz")) %>% 
-      mutate_if(grepl('University',.), ~replace(., grepl('University.*', .), "affiliation")) %>% 
+      #mutate_if(grepl('University',.), ~replace(., grepl('University.*', .), "affiliation")) %>% 
       #filter(row_number() == which(duplicated("question")))
-      slice(-c(which(duplicated('question')))) %>% 
+      slice(c(which(duplicated(question)==F))) %>% 
       remove_rownames() %>% 
       column_to_rownames("question") %>%  
       rownames_to_column() %>%
