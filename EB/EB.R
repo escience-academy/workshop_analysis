@@ -14,7 +14,7 @@
 # some EB inforamtion about ticket
 #-------------------------------------------
 # To Do:
-# - clean up affiliations
+# - take out test events
 #-------------------------------------------
 # searches eventbrite for my event IDs and returns data about workshops participants
 library(jsonlite)
@@ -40,7 +40,8 @@ evURL <- paste0("https://www.eventbriteapi.com/v3/organizations/91980504819/even
 event_info <- event_info(evURL)
 
 #all_events <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
-all_events <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
+all_events <- lapply(event_info$uri, function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
+#all_events <- lapply(event_info$uri[5], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
 
 # from each events' page
 # numbers in between throw an error I haven't had time to check yet (2,11,18,19,23,24)
@@ -59,16 +60,25 @@ event_data <- merge(event_data, unique(institutes), all.x = T) %>%
   mutate(affiliation = coalesce(affiliation, email_aff)) %>% 
   mutate(affiliation = toupper(affiliation)) %>% 
   mutate(year = format(as.Date(event_date, format="%Y-%m-%d"), "%Y")) %>% 
-  select(-aff_corrected)
+  select(-aff_corrected) %>% 
+  arrange(.,event)
 
 event_data <- merge(event_data, unique(institutes), by="affiliation", all.x=T) %>% 
-  mutate(affiliation=aff_corrected) %>% 
-  select(-aff_corrected)
+  mutate(affiliation=toupper(aff_corrected), 
+         Affiliation_type=Affiliation_type.x) %>% 
+  select(-aff_corrected, -Affiliation_type.y) %>% 
+  select(event, event_date, year, org_id,name,email,affiliation,Affiliation_type,car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
+        created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri) %>% 
+  arrange(.,event)
 
-event_data <- left_join(event_data, unique(institutes)) %>% # do this again so the ones who filled out something like "PhD student" 
-  #in the affiliation field, get the affiliation from their email address
-  select(event, event_date, year, org_id,name,email,affiliation, Affiliation_type, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
-         aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri)
 
+ event_data <- left_join(event_data, unique(institutes), by="affiliation", all.x=T) %>%# do this again so the ones who filled out something like "PhD student" 
+   #in the affiliation field, get the affiliation from their email address
+   select(event, event_date, year, org_id,name,email,affiliation, Affiliation_type.y, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
+          aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri) %>% 
+   slice(c(which(year>2015))) %>% #there is only one event in 2015 and five Lodes attended
+   arrange(.,year)
+
+  
 write_csv(event_data, paste0(dirname(exec_dir),'/data/eventbrite.csv'))
 
