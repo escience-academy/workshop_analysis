@@ -14,7 +14,6 @@
 # some EB inforamtion about ticket
 #-------------------------------------------
 # To Do:
-# - check error in lapply
 # - clean up affiliations
 #-------------------------------------------
 # searches eventbrite for my event IDs and returns data about workshops participants

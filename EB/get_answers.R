@@ -23,7 +23,7 @@ get_answers <- function(ppt_all, ppt_info) {
       #mutate(answer_question = question) %>% 
       select(starts_with("answer")) %>% 
       #rename(question=answer_question) %>% 
-      rename_at(vars(matches("answer_question")), function(x) "question") %>% 
+      rename_at(vars(matches("answer_question")), function(x) "question") %>%
       mutate_if(grepl('affiliation',.), ~replace(., grepl('affiliation.*', .), "affiliation")) %>% 
       mutate_if(grepl('Organization',.), ~replace(., grepl('Organization.*', .), "affiliation")) %>% 
       mutate_if(grepl('collaboration',.), ~replace(., grepl('collaboration.*', .), "eSc_collab")) %>% 
@@ -33,6 +33,8 @@ get_answers <- function(ppt_all, ppt_info) {
       mutate_if(grepl('career stage',.), ~replace(., grepl('career stage.*', .), "career_stage")) %>% 
       mutate_if(grepl('Git Quiz',.), ~replace(., grepl('Git Quiz.*', .), "git_quiz")) %>% 
       mutate_if(grepl('University',.), ~replace(., grepl('University.*', .), "affiliation")) %>% 
+      #filter(row_number() == which(duplicated("question")))
+      slice(-c(which(duplicated('question')))) %>% 
       remove_rownames() %>% 
       column_to_rownames("question") %>%  
       rownames_to_column() %>%
