@@ -14,7 +14,7 @@
 # some EB inforamtion about ticket
 #-------------------------------------------
 # To Do:
-# - clean up affiliations
+# - take out test events
 #-------------------------------------------
 # searches eventbrite for my event IDs and returns data about workshops participants
 library(jsonlite)
@@ -72,12 +72,13 @@ event_data <- merge(event_data, unique(institutes), by="affiliation", all.x=T) %
   arrange(.,event)
 
 
- event_data <- left_join(event_data, unique(institutes), by="affiliation", all.x=T) %>%
+ event_data <- left_join(event_data, unique(institutes), by="affiliation", all.x=T) %>%# do this again so the ones who filled out something like "PhD student" 
+   #in the affiliation field, get the affiliation from their email address
    select(event, event_date, year, org_id,name,email,affiliation, Affiliation_type.y, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
           aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri) %>% 
-   arrange(.,event)
-# do this again so the ones who filled out something like "PhD student" 
-  #in the affiliation field, get the affiliation from their email address
+   slice(c(which(year>2015))) %>% #there is only one event in 2015 and five Lodes attended
+   arrange(.,year)
+
   
 write_csv(event_data, paste0(dirname(exec_dir),'/data/eventbrite.csv'))
 
