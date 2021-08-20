@@ -6,7 +6,6 @@ source("../EB/get_unique_events.R")
 source("../EB/get_event_focus.R")
 source("../EB/get_event_level.R")
 
-
 exec_dir <- dirname(rstudioapi::getSourceEditorContext()$path) #the dir this script is in
 setwd(exec_dir)
 
@@ -36,25 +35,25 @@ dc.py.20210419$event <- "Data Carpentry with Python"
 dc.py.20210419$event_date <- "2021-04-19"
 
 Momice_events<-rbind(swc.R.20210517, ds.parallel.20210412, dc.py.20210419) %>% 
-  mutate(eSc_collab = `Fill in the code you received from the eScience Center here:`=="eScience2021") %>% 
-  mutate(eSc_collab = eSc_collab %in% TRUE) %>% 
-  mutate(year = 2021) %>% 
-  mutate(event_date = format(as.Date(event_date))) %>% 
-  mutate(year = format(as.Date(event_date, format="%Y-%m-%d"), "%Y")) %>% 
-  mutate(event_id = NA) %>% 
-  mutate(venue_id = NA) %>% 
-  mutate(uri=`Confirmation URL`) %>% 
-  rename(email = Email) %>% 
-  rename(name = Name) %>% 
-  rename(ticket_type = Ticket) %>% 
-  rename(id=`Registration id`) %>% 
-  rename(order_id=id) %>% 
-  rename(created=`Registration date`) %>% 
-  rename(affiliation = `What's your affiliation? (e.g. Leiden University)`) %>% 
-  rename(car1 = `What is your career stage? Please choose the option you think describes your position best.`) %>% 
-  mutate(org_id = NA) %>% 
-  mutate(car2 = NA)
-  
+  mutate(eSc_collab = `Fill in the code you received from the eScience Center here:`=="eScience2021", 
+         eSc_collab = eSc_collab %in% TRUE,
+         year = 2021,
+         event_date = format(as.Date(event_date)),
+         year = format(as.Date(event_date, format="%Y-%m-%d"), "%Y"),
+         event_id = NA,
+         venue_id = NA,
+         uri=`Confirmation URL`,
+         email = Email,
+         name = Name,
+         ticket_type = Ticket,
+         id=`Registration id`,
+         order_id=id,
+         created=`Registration date`,
+         affiliation = `What's your affiliation? (e.g. Leiden University)`,
+         car1 = `What is your career stage? Please choose the option you think describes your position best.`,
+         org_id = NA,
+         car2 = NA)
+
 indxs <- data.frame(which((Momice_events == "checked" | Momice_events == "aangevinkt"), arr.ind=T)) %>% 
   arrange(row) %>% 
   filter(col>6) %>% 
@@ -62,10 +61,10 @@ indxs <- data.frame(which((Momice_events == "checked" | Momice_events == "aangev
   group_by(row) %>% 
   mutate(index=1:n()) %>% 
   mutate(disnum=paste0("dis", index)) %>% 
-  select(-index)
+  select(-index) # split up disciplines into separate columns
 
 for (i in 1:max(indxs$row)) {
-  indxs$col[indxs$col==i] <- names(Momice_events)[i] 
+  indxs$col[indxs$col==i] <- names(Momice_events)[i] #fill out names of disciplines
 }
 
 indxs <- indxs %>%
@@ -103,7 +102,6 @@ event_data <- merge(event_data, unique(institutes), by="affiliation", all.x=T) %
          created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri) %>% 
   arrange(.,event)
 
-
 event_data <- left_join(event_data, unique(institutes), by="affiliation", all.x=T) %>%# do this again so the ones who filled out something like "PhD student" 
   #in the affiliation field, get the affiliation from their email address
   select(event, event_date, year, org_id,name,email,affiliation, Affiliation_type.y, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
@@ -114,11 +112,3 @@ event_data <- left_join(event_data, unique(institutes), by="affiliation", all.x=
   arrange(.,year)
 
 write_csv(event_data, paste0(dirname(exec_dir),'/data/momice.csv'))
-
-
-#                                            
-# "aff_country"        "RI_type"                      "event_type"         "event_level"        "event_focus"       
-#                                                                
-
-
-
