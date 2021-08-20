@@ -27,6 +27,8 @@ setwd(exec_dir)
 source("get_EB_functions.R")
 get_EB_functions()
 
+
+
 tokens <- read.delim("tokens.txt", header=F)
 token <- str_split(tokens$V1, pattern=" ")[[1]][2]
 
@@ -76,6 +78,8 @@ event_data <- merge(event_data, unique(institutes), by="affiliation", all.x=T) %
    #in the affiliation field, get the affiliation from their email address
    select(event, event_date, year, org_id,name,email,affiliation, Affiliation_type.y, car1,car2,eSc_collab,ERCdis, NLeScdis, dis1,dis2,dis3,dis4,dis5,
           aff_country, RI_type,created,event_type,event_level,event_focus, ticket_type,order_id,id,event_id,venue_id,uri) %>% 
+   mutate(affiliation_type = Affiliation_type.y) %>% 
+   select(-Affiliation_type.y) %>% 
    slice(c(which(year>2015))) %>% #there is only one event in 2015 and five Lodes attended
    arrange(.,year)
 

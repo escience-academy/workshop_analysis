@@ -15,24 +15,10 @@ get_ppt_info <- function(EBurl, req_names, token) {
   if (is_empty(ppt_all)) {
     
     answers <- data.frame(id=character(),
-                               affiliation=character(),
-                               dis1=character(),
-                               dis2=character(),
-                               dis3=character(),
-                               dis4=character(),
-                               dis5=character(),
-                               event_id=character(),
-                               order_id=character(),
-                               tikcet_type=character(),
-                               created=character(),
-                               name=character(),
-                               email=character(),
-                               ERCdis=character(),
-                               NLeScdis=character(),
-                               eSc_collab=character(),
-                               car1=character(),
-                               car2=character(),
-                               git_quiz=character(),
+                               affiliation=character(), dis1=character(), dis2=character(), dis3=character(), dis4=character(),
+                               dis5=character(), event_id=character(), order_id=character(), ticket_type=character(), created=character(),
+                               name=character(), email=character(), ERCdis=character(), NLeScdis=character(), eSc_collab=character(),
+                               car1=character(), car2=character(), git_quiz=character(),
                                stringsAsFactors=FALSE)
     
   }
