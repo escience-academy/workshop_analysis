@@ -1,12 +1,8 @@
+#Script by Lieke de Boer, August 2021
+# This is an ugly script that just needs to be run once, in theory. We will not receive new Momice data so only rerun/save 
+# this script if something is wrong with the variables
+
 Momice <- function(write_file) {
-  
-  # library(tidyverse)
-  # library(rio)
-  # 
-  # source("../EB/detect_discipline.R")
-  # source("../EB/get_unique_events.R")
-  # source("../EB/get_event_focus.R")
-  # source("../EB/get_event_level.R")
   
   exec_dir <- paste0(getwd(), '/Momice')
   

@@ -1,7 +1,22 @@
 #-------------------------------------------
-#Script by Lieke de Boer, August 2021
-# This is an ugly script that just needs to be run once, in theory. We will not receive new Momice data so only rerun/save 
-# this script if something is wrong with the variables
+#Script by Lieke de Boer, March 2021
+#Calls eSc_ppts which scrapes participant information off of Eventbrite (EB), returns a dataframe with participant information (if available):
+# event name
+# event date
+# organiser name (NLeSc, NL-RSE or other)
+# event ppt name
+# event ppt email address
+# event ppt affiliation
+# event ppt career stage
+# event ppt collaborator with NLeSc?
+# up to 5 disciplines (dis1-dis5)
+# did ppt fill out git quiz?
+# some EB inforamtion about ticket
+#-------------------------------------------
+# To Do:
+# - take out test events
+#-------------------------------------------
+# searches eventbrite for my event IDs and returns data about workshops participants
 
 EB <- function(write_file) {
   
