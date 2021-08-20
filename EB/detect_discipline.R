@@ -1,11 +1,10 @@
 detect_discipline <- function(answers) {
   if (is.element("dis1", names(answers))) {
     
-    otherdis <- read.csv(paste0(dirname(getwd()),'/data/ERC_cat.csv'), sep = ";") %>% 
+    otherdis <- read.csv(paste0(getwd(),'/data/ERC_cat.csv'), sep = ";") %>% 
       separate(ERC,sep=" [|] ",c("ERCdis1", "ERCdis2")) %>% 
       separate(NLeSc,sep=" [|] ",c("NLeScdis1", "NLeScdis2"))
 
-  
     sepdis <- answers %>% 
       pivot_longer(starts_with("dis"),names_to = c("disnum")) %>% 
       rename(dis=value) %>% 
