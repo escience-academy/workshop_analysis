@@ -27,8 +27,6 @@ setwd(exec_dir)
 source("get_EB_functions.R")
 get_EB_functions()
 
-
-
 tokens <- read.delim("tokens.txt", header=F)
 token <- str_split(tokens$V1, pattern=" ")[[1]][2]
 

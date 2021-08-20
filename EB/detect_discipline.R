@@ -4,7 +4,8 @@ detect_discipline <- function(answers) {
     otherdis <- read.csv(paste0(dirname(getwd()),'/data/ERC_cat.csv'), sep = ";") %>% 
       separate(ERC,sep=" [|] ",c("ERCdis1", "ERCdis2")) %>% 
       separate(NLeSc,sep=" [|] ",c("NLeScdis1", "NLeScdis2"))
-    
+
+  
     sepdis <- answers %>% 
       pivot_longer(starts_with("dis"),names_to = c("disnum")) %>% 
       rename(dis=value) %>% 
@@ -18,18 +19,25 @@ detect_discipline <- function(answers) {
     NLeScdis <- sepdis %>% 
       select(starts_with("NLeSc"))
     
-    bb<-apply(ERCdis,1,function(x) names(which.max(table(x))))
-    cc<-apply(NLeScdis,1,function(x) names(which.max(table(x))))
+    # bb<-apply(ERCdis,1,function(x) names(which.max(table(x))))
+    # cc<-apply(NLeScdis,1,function(x) names(which.max(table(x))))
+    # 
+    # if (!is.null(bb)) {
+    #   bb[sapply(bb, is.null)] <- NA
+    #   answers$ERCdis <- unlist(bb)
+    #     } 
+    # 
+    # if (!is.null(cc)) {
+    #   cc[sapply(cc, is.null)] <- NA
+    #   answers$NLeScdis <- unlist(cc)
+    # }
     
-    if (!is.null(bb)) {
-      bb[sapply(bb, is.null)] <- NA
-      answers$ERCdis <- unlist(bb)
-        } 
+    bb<-rowMode(data.frame(NLeScdis), ties="random")
+    cc<-rowMode(data.frame(NLeScdis), ties="random")
     
-    if (!is.null(cc)) {
-      cc[sapply(cc, is.null)] <- NA
-      answers$NLeScdis <- unlist(cc)
-    }
+    answers$ERCdis <- bb
+    answers$NLeScdis <- cc
+    
   }
   return(answers)
 }
