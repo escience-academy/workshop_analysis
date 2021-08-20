@@ -19,24 +19,11 @@ detect_discipline <- function(answers) {
     NLeScdis <- sepdis %>% 
       select(starts_with("NLeSc"))
     
-    # bb<-apply(ERCdis,1,function(x) names(which.max(table(x))))
-    # cc<-apply(NLeScdis,1,function(x) names(which.max(table(x))))
-    # 
-    # if (!is.null(bb)) {
-    #   bb[sapply(bb, is.null)] <- NA
-    #   answers$ERCdis <- unlist(bb)
-    #     } 
-    # 
-    # if (!is.null(cc)) {
-    #   cc[sapply(cc, is.null)] <- NA
-    #   answers$NLeScdis <- unlist(cc)
-    # }
-    
     bb<-rowMode(data.frame(NLeScdis), ties="random")
-    cc<-rowMode(data.frame(NLeScdis), ties="random")
+    cc<-rowMode(data.frame(ERCdis), ties="random")
     
-    answers$ERCdis <- bb
-    answers$NLeScdis <- cc
+    answers$ERCdis <- cc
+    answers$NLeScdis <- bb
     
   }
   return(answers)
