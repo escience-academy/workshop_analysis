@@ -8,13 +8,17 @@ get_event_level <- function(event_data) {
     mutate_if(grepl('Parallel Programming in Python',., ignore.case=T), ~replace(., grepl('Parallel Programming in Python.*', ., ignore.case=T), "Advanced")) %>% 
     mutate_if(grepl('Containers',., ignore.case=T), ~replace(., grepl('Containers.*', ., ignore.case=T), "Advanced")) %>% 
     mutate_if(grepl('eScience Symposium',., ignore.case=T), ~replace(., grepl('eScience Symposium.*', ., ignore.case=T), "Other")) %>% 
+    mutate_if(grepl('Introduction to deep learning',., ignore.case=T), ~replace(., grepl('Introduction*', ., ignore.case=T), "Advanced")) %>% 
     mutate_if(grepl('Introduction',., ignore.case=T), ~replace(., grepl('Introduction.*', ., ignore.case=T), "Essential")) %>% 
     mutate_if(grepl('Good practices',., ignore.case=T), ~replace(., grepl('Good practices.*', ., ignore.case=T), "Essential")) %>% 
     mutate_if(grepl('FAIR software workshop',., ignore.case=T), ~replace(., grepl('FAIR Software Workshop*', ., ignore.case=T), "Essential")) %>% 
     mutate_if(grepl('Version Control and Collaboration with Git and GitHub',., ignore.case=T), ~replace(., grepl('Version.*', ., ignore.case=T), "Essential")) %>% 
     mutate_if(grepl('Research data handling',., ignore.case=T), ~replace(., grepl('Research data.*', ., ignore.case=T), "Essential")) %>% 
-    mutate_if(grepl('Computational skills for the humanities',., ignore.case=T), ~replace(., grepl('Workshop.*', ., ignore.case=T), "Essential"))
-
+    mutate_if(grepl('Computational skills for the humanities',., ignore.case=T), ~replace(., grepl('Workshop.*', ., ignore.case=T), "Essential")) %>% 
+    mutate_if(grepl('GPU programming',., ignore.case=T), ~replace(., grepl('GPU.*', ., ignore.case=T), "Advanced")) %>% 
+    mutate_if(grepl('Deep learning',., ignore.case=T), ~replace(., grepl('Deep*', ., ignore.case=T), "Advanced"))
+  
+  
       
   
   un_events$event_level <- if_else((un_events$event_level != "Essential") & (un_events$event_level != "Intermediate") & (un_events$event_level != "Advanced") , 

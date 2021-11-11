@@ -34,17 +34,10 @@ EB <- function(write_file) {
   
   event_info <- event_info(evURL)
   
-  #all_events <- lapply(event_info$uri[c(1,3:10,12:17,20:22,25:39)], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
   all_events <- lapply(event_info$uri, function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
-  #all_events <- lapply(event_info$uri[5], function(el) get_ppt_info(el, req_names, token)) # eSc_ppts_EB extracts info 
-  
-  # from each events' page
-  # numbers in between throw an error I haven't had time to check yet (2,11,18,19,23,24)
   
   all_together <- do.call("bind_rows", all_events) %>% 
     mutate(affiliation=toupper(affiliation))
-  
-  # all_together <- left_join(all_together, unique(institutes)) #manually adapted affiliations
   
   all_together$email_aff<-sapply(strsplit(all_together$email, "@"), "[[", 2)
   all_together$email_aff<-str_replace_all(all_together$email_aff, pats, NA_character_)
