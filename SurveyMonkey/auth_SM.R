@@ -8,7 +8,7 @@ token <- str_split(tokens$V1, pattern=" ")[[2]][2] #token stuff for authenticati
 
 usethis::edit_r_profile()
 options(sm_oauth_token = token)
-getOption("sm_oauth_token")
+#getOption("sm_oauth_token")
 
 surveys <- browse_surveys(200)  # see your most recent 200 surveys
 
@@ -22,4 +22,6 @@ pre_workshop <- surveys %>%
   filter(!grepl('Copy of', title)) %>%
   select(title, id) #all pre-workshop surveys and ids
 
-
+survey_df <- post_workshop$id[1] %>%
+  fetch_survey_obj %>%
+  parse_survey
