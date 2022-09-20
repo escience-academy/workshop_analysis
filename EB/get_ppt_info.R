@@ -15,18 +15,25 @@ get_ppt_info <- function(EBurl, req_names, token) {
   if (is_empty(ppt_all)) {
     
     answers <- data.frame(id=character(),
-                               affiliation=character(), dis1=character(), dis2=character(), dis3=character(), dis4=character(),
-                               dis5=character(), event_id=character(), order_id=character(), ticket_type=character(), created=character(),
-                               name=character(), email=character(), ERCdis=character(), NLeScdis=character(), eSc_collab=character(),
-                               car1=character(), car2=character(), git_quiz=character(),
-                               stringsAsFactors=FALSE)
+                          affiliation=character(), dis1=character(), dis2=character(), dis3=character(), dis4=character(),
+                          dis5=character(), event_id=character(), order_id=character(), ticket_type=character(), created=character(),
+                          name=character(), email=character(), ERCdis=character(), NLeScdis=character(), eSc_collab=character(),
+                          car1=character(), car2=character(), git_quiz=character(),
+                          stringsAsFactors=FALSE)
     
-  }
-      
-   else {
-     
-  ppt_pers    <- ppt_all$profile %>% 
-    select(name, email) 
+  } else {
+    
+    if ("name" %in% colnames(ppt_all$profile)) {   
+      ppt_pers    <- ppt_all$profile %>% 
+        select(name, email) 
+      } else if ("first_name" %in% colnames(ppt_all$profile)) {
+      ppt_pers    <- ppt_all$profile %>% 
+        select(first_name, last_name, email) %>% 
+        mutate(name = paste(first_name, last_name)) 
+      } else {   
+      ppt_pers    <- ppt_all$profile %>% 
+        select(email)
+    }
   
   ppt_info <- ppt_all %>% 
     select(id, event_id, order_id, ticket_class_name, created) %>%
@@ -38,7 +45,7 @@ get_ppt_info <- function(EBurl, req_names, token) {
   
   add_after <- req_names[!is.element(req_names,names(answers))]
   answers[,add_after]=NA
-    }
+  }
   return(answers) #change back to return(answers)
 }
 

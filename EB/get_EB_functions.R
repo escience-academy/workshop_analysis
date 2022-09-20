@@ -9,7 +9,7 @@ get_EB_functions <- function() {
   source('./EB/get_event_level.R')
   source('./EB/get_event_focus.R')
   source('./EB/detect_discipline.R')
-  source('./EB/EB.R')
+  source('./EB/EventBrite.R')
   source('./EB/rowMode.R')
   source('./Momice/Momice.R')
 }

@@ -39,7 +39,7 @@ get_answers <- function(ppt_all, ppt_info) {
       column_to_rownames("question") %>%  
       rownames_to_column() %>%
       pivot_longer(-rowname, 'id', 'value') %>%
-      pivot_wider(id, rowname) %>% 
+      pivot_wider(id, names_from = rowname) %>% 
       mutate(id=cols) %>% 
       left_join(ppt_info, by="id")
     
