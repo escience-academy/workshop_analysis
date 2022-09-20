@@ -26,10 +26,13 @@ Momice <- function(write_file) {
   
   swc.R.20210517$event <- "Software Carpentry with R"
   swc.R.20210517$event_date <- "2021-05-17"
+  swc.R.20210517$event_id <- "2021-05-17-swc-r"
   ds.parallel.20210412$event <- "Parallel Programming with Python"
   ds.parallel.20210412$event_date <- "2021-04-12"
+  ds.parallel.20210412$event_id <- "2021-04-12-ds-parallel"
   dc.py.20210419$event <- "Data Carpentry with Python"
   dc.py.20210419$event_date <- "2021-04-19"
+  dc.py.20210419$event_id <- "2021-04-19-dc-python"
   
   Momice_events<-rbind(swc.R.20210517, ds.parallel.20210412, dc.py.20210419) %>% 
     mutate(eSc_collab = `Fill in the code you received from the eScience Center here:`=="eScience2021", 
@@ -37,7 +40,6 @@ Momice <- function(write_file) {
            year = 2021,
            event_date = format(as.Date(event_date)),
            year = format(as.Date(event_date, format="%Y-%m-%d"), "%Y"),
-           event_id = NA,
            venue_id = NA,
            uri=`Confirmation URL`,
            email = Email,
